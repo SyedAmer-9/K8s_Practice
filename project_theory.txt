@@ -1,11 +1,31 @@
+My main MLOps project is deployed to a single EC2 instance, which is a great solution for a simple service. But I knew that isn't robust enough for a real-world, high-traffic application—it has no fault tolerance or auto-scaling.
+
+So, I spent time learning Kubernetes as the professional solution. I built a separate test application, containerized it with Docker, and then deployed it to a local minikube cluster.
+
+I wrote the Deployment and Service YAML manifests myself. I configured the Deployment with two replicas and tested its self-healing by manually deleting a pod and watching kubectl spin up a new one. Then I used Postman to run a performance test and watched the Service load-balance the traffic between the two running pods.
+
+This is the architecture I would use to take my main MLOps project to a true, scalable production environment."
 
 
+
+
+first we write simple app.py that we are gonna dockerize using docker we also set up html and css file and then we start dockerhub/docker desktop on local
+
+we then start writing the docker file in the project we use ENV method to keep the container size small we make the working directory as app and write down all the basic DOcker instructions to run Docker container, you can type
+docker images to see current containers present in the docker
+
+docker build -t k8s-test-app:latest . :used to build docker image by following instructions of dockerfile
+
+docker run -p 5001:5001 k8s-test-app :to run the image and form a container
+
+Now we create deployment.yaml which is the kubemanifest for a kubernetes container
 
 
 we run k8s cluster on AWS,local or dedicated servers
 to run kubernetes and create Cluster we use a toold called minikube
 first you need to download minikue and install it , it is a microservice provided to create cluster of kubernetes
-we then use minikube start to start the cluster it will print Done! kubectl is now configued to use minikube cluster and default namespace by default
+we then use "minikube start" to start the cluster it will print Done! 
+kubectl is now configued to use minikube cluster and default namespace by default
 check status : minikube status
 stop cluster : minikube stop
 
@@ -26,10 +46,12 @@ when we type kuubectl get nodes -A  for the first time then we will only see we 
 
 to push the image directly to clusster
 minikube image load <ImageName>
-here it is : minikube image load kubernetes-teset-app:latest
+here it is : minikube image load kubernetes-test-app:latest
+remeber that if you stop a cluster you should also deleteimages in it
 
 deployment.yaml
 download vscode kubernetes extention and then type deploy on type enter to get the code snippet
+
 
 apiVersion : any namespace
 kind should be deployment file
@@ -44,3 +66,8 @@ ports: port number where app should be put
 service.yaml
 common end point for all pods
 
+minikube service <podname> : to start the service of pod
+
+
+ingress : ingesting data into cluster
+egress : taking out data from cluster
