@@ -1,0 +1,94 @@
+Topics tp be covered
+    Distributed Computing
+    MicroServices
+    Kuberenetes
+
+
+DISTRIBUTED Computing
+
+imagine there is a master setup that serves around 100 customers per day and suddenly one day your setup goes popular and then the customer size increased from 100 to 1000 but now alone ou cannot serve it will crash the entire setup so you hire 2 o 10 more small setups and divide the customers to that small setups ,so you divide huge chunk to small chunks ,even if one small setup goes offline there are remaining that can take up the tasks,but suddenly getting all the chefs is difficult,Now this huge setup is called Lead, and other small setups are called worker node the entire setup is called cluster
+
+if there are tasks that cannot be handled single handedly by lead then it is divided among worker nodes there is no need for worker nodes to be same there is diversity among worker node, this is called parallel processing for faster and more efficient computation 
+
+Communication : communication in Distributed Computing refers to how nodes in the cluster exchange data and instructions it happens through nerwork protocols and is crucial for synchornization and data sharing among nodes
+
+Concurrency: Concurrency in Distributed systemss alllows ultiple tasks to run simultaneaously across nodes. This boosts speed and ensures fault tolerance if one node fails the woorload is siffted to otheers ,preventing disruptions
+
+Apache Spart and Kubernetes both enable Distributed Computing but operate differently Spark uses a specialised model called Mapreduce where taska are diving into map(processing) and reduce(aggregation) steps .Kuberenets on the other hand provides a general purpose framework for orchestrating containerized workloads and does not impose specific computation model
+
+Benefits - 
+Scalability
+fault tolerance
+improved performace : tasks are processed in parallel reducting overall latency and making applctaions faster
+Cost efficient : instead of buying one super computers we can use multiple cheaper macines
+flexibility:can use different types of macines hardwares or even cloud providers
+
+MicroServices:
+
+considering a ML project
+theres are difference components :
+Data ingestion
+data pre processing
+feature engineering
+model training & model evaluation
+model serving/App(model pushing)
+
+all the above form a docker image and are deployed on EC2 machine
+this app gains popular overnight and instead of 100 users we get 10000 users
+now what we do is scale the docker image so that the image can handle high trafiic but if we notice data ingestion,data pre processing or feature engineering,model training components got no effect due to traffic as they do the same tasks even if the traffic is more or less the only component that got affected is Model serving/App.
+When entire architecture is scaled when traffic is increased it is called Monolithic
+
+if each of the component are deployed on seperate machine,then if data ingestion got load we can distribute it and if any other component goes through high load we can just create multiple machines parallelly but this works only on small scale applications if size is huge an ML project itself becomes microservice 
+
+we use Distributed Computing to scale micro MicroServices
+
+challenges of Distributed Computing
+
+resource management: allocatiing resource like CPU memory and storage accross machines is comples How do you ensure that all the instances of computesrs are used equally
+
+Scaling : even if you create computers you have to configure the task in each of the machines
+
+Communication and networking : machines in a ds need to communite constantly network faiulers,latencies or configuration erros can cause significant issues
+
+Fault Handling : ensuring fault tolerance requires mechanisms to detect failures , recover lost data and reroute tasks all while minimizing downtime
+
+Load Balancing : distributing tasks evenly across machines is non trivial Overloading one machine while others remain underutilized can degrade system performance
+
+Configure and Deployemeny : managing the deploment of software across multiple machines can be error prone Imahine manually configuring hundreds of machines its a logistical nightmare 
+
+Monitoring and Debugging : Identifying issues in a distributed system is much harder than in a single system Logs metric and performace data are spreadd acrosss multiple machines
+
+For all tthis thing Kubernetes comes into Pictture 
+so to achieve this the most important component is Docker as different computers can have different properties and Docker is unified component
+
+Kubernetes Internals
+Lead/Master Node - Control Plane : 
+It is the brain of the Kuberenetes cluster it oversees the system manages workloads and ensures everything runs as expected Think of it as the manages in the factory
+
+Resource Manager: The resource manager in Kubernetes ensures that cluster resources like CPU, memory, and storage are allocated efficiently. It's like a warehouse manager who ensures that raw materials (resources) ire distributed to the right production lines (nodes/images). think it like a component present inside Control Plane.
+
+Communication (User Communication): Users interact with Kubernetes through the API Server. It's like the receptionist at an office-you send requests (like deploying an app), and the API Server routes them to the appropriate components in the cluster.Think it like something present inside Control Plane.Correcting routing of correct request to correct component
+
+Database (etcd): "etcd" is kubernetes' central database where all cluster data is stored, including the current state of the system and desired configurations. Imagine it as a library/index for all the components/images.
+that catalogs every time you check out or return a book, the catalog is updated to reflect the changes.
+
+Worker Node: Worker nodes are the muscle of the cluster. They run your applications and handle the tasks assigned by the master node. Think of them as factory workers who execute tasks given by the manager (master node)
+
+Kubelet: The kubelet is an agent running on each worker node that ensures containers (your applications) are running as expected/configured. It's like a shift supervisor in a factory who ensures each machine is operating correctly.
+Kubelet informs any anamolies to Control Pane which will further contain Resource Manager.
+
+Kube-Proxy: The kube-proxy manages network traffic for pods/instances/computers, ensuring they can communicate with each other and the outside world. It's like a traffic cop at a busy intersection, directing cars (data packets) to the right destinations.
+
+Pods: A pod is the smallest deployable unit in Kubernetes and typically wraps one or more containers. Think of it as a container ship holding one or more goods (containers) and transporting them across a logistics network.Ex - Data ingestion pod in an instance
+
+SharedDB(volumes) ; Volumes are shared storage spaces in Kubernetes that allow pods to save and share data. It's like a shared locker room where workers (pods) can access tools or leave notes for each other.
+
+Kube-Manifest (YAML): Kube manifests are configuration files written in YAML that define what you want Kubernetes to do, such as deploying an app or creating a service. Think of it as blueprint for building a house-kubernetes reads it to know exactly what to construct.
+
+Service: A service in Kubernetes provides a stable network endpoint(contact point) for accessing a set of pods.Basically a unified endpoint to contact set of pods. Even if the pods are replaced or moved, the service ensures they can still be reached.
+
+Namespace: Namespaces are virtual clusters within a kubernetes cluster that help organize and isolate resources. It's like different departments in a large office building HR, Sales,IT each work in separate areas but share the same infrastructure.
+
+Scheduler: Decides which worker node will run a new pod based on resource availability. It's like a dispatcher allocating tasks to the most available worker.It is used by Resource manager
+
+Replicasets: Ensure that a specified number of identical pods are always running. It's like a backup generator ensuring there's always power even if one generator fails.
