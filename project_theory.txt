@@ -1,0 +1,46 @@
+
+
+
+
+we run k8s cluster on AWS,local or dedicated servers
+to run kubernetes and create Cluster we use a toold called minikube
+first you need to download minikue and install it , it is a microservice provided to create cluster of kubernetes
+we then use minikube start to start the cluster it will print Done! kubectl is now configued to use minikube cluster and default namespace by default
+check status : minikube status
+stop cluster : minikube stop
+
+kuubectl get all -A : shows every thing that is present in cluster
+kuubectl get pods -A : shows all the pods present in the cluster (pods are microservices inside worker node)
+kuubectl get nodes -A : shows all the nodes(Control plane & worker)
+
+
+if we want nodes during start then : minikube start --nodes=2
+
+when we type this kuubectl get pods -A  we will sse that few pods are already running those are services we discussed int theory(ETCD API server etc) thus it means those microservices are docker container themselves
+Kubernetes itself runs on top of docker services
+
+minikube delete --all : deletes all pods in a cluster
+minikube image list : shows all the images present in the cluster
+
+when we type kuubectl get nodes -A  for the first time then we will only see we will only see Control Plane as for the first time there are no worker nodes yet
+
+to push the image directly to clusster
+minikube image load <ImageName>
+here it is : minikube image load kubernetes-teset-app:latest
+
+deployment.yaml
+download vscode kubernetes extention and then type deploy on type enter to get the code snippet
+
+apiVersion : any namespace
+kind should be deployment file
+metadata additonal info
+spec: features 
+replicas : 2 number of pods
+image: should have name and tag
+imagePullPolicy : default is remote repo if you put Never then it wont look in repo it will look in local
+resources : each nodes specs
+ports: port number where app should be put 
+
+service.yaml
+common end point for all pods
+
